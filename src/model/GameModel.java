@@ -134,7 +134,7 @@ public class GameModel {
         // Uncomment this line after completing TODO 13
         actors.add(new Blinky(this));
         // Uncomment this line after completing TODO 14
-        //actors.add(new Pinky(this));
+        actors.add(new Pinky(this));
         // Uncomment this line after completing TODO 15
         //actors.add(new Inky(this));
         // Uncomment this line after completing TODO 16
