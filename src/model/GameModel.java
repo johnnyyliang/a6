@@ -132,7 +132,7 @@ public class GameModel {
         //  the challenge extension
         //actors.add(withAI ? new PacMannAI(this) : new PacMannManual(this));
         // Uncomment this line after completing TODO 13
-        //actors.add(new Blinky(this));
+        actors.add(new Blinky(this));
         // Uncomment this line after completing TODO 14
         //actors.add(new Pinky(this));
         // Uncomment this line after completing TODO 15
