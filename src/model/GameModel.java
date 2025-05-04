@@ -94,6 +94,10 @@ public class GameModel {
     // TODO 4: Add a field to keep track of the Direction associated with the most recent player
     //  input.  Also, add a `playerCommand()` accessor and an `updatePlayerCommand()` mutator method
     //  for this field.
+    /**
+     * The Direction associated with the most recent player input
+     */
+    private Direction playerCommand;
 
     /**
      * Helper object for managing property change notifications.
@@ -188,6 +192,12 @@ public class GameModel {
     /* ****************************************************************
      * Accessor methods                                               *
      **************************************************************** */
+
+    //TODO 4 ACCESSOR
+    /**
+     * Returns the direction associated with the most recent player input
+     */
+    public Direction playerCommand() { return playerCommand; }
 
     /**
      * Return the GameMap that was used to construct this model
@@ -330,7 +340,8 @@ public class GameModel {
         //  positioned on `v`, remove it (it was eaten by PacMann). If this was a DOT, increase the
         //  score by 10 and notify "score" observers. If this was a PELLET, increase the score by
         //  50, notify "score" observers, and initiate the FLEE sequence.  Pay careful attention to
-        //  the invariant on`items`. `item` only includes the vertices containing DOTs and PELLETs, not NONE.
+        //  the invariant on`items`. `item` only includes the vertices containing DOTs and PELLETs,
+        //  not NONE.
 
         //TODO could potentially be .equals(Item.valueOf("DOT")) if error
         if(itemAt(v).equals(Item.DOT)){
@@ -399,6 +410,15 @@ public class GameModel {
         assert state == GameState.PLAYING;
         setState(GameState.VICTORY);
         propSupport.firePropertyChange("game_result", null, GameState.VICTORY);
+    }
+    //TODO 4
+
+    /**
+     * Updates the 'playerCommand' with the direction associated with the most recent player input
+     */
+    private void updatePlayerCommand(Direction recentCommand){
+
+        playerCommand = recentCommand;
     }
 
     /* ****************************************************************
