@@ -140,6 +140,13 @@ public class GameFrame extends JFrame implements PropertyChangeListener {
         //   the `JOptionPane` documentation to determine an appropriate method to call to produce
         //   this dialog box and understand its parameters. When the dialog is closed by the player,
         //   a new game should be created and shown.
+        JOptionPane.showMessageDialog(
+            this,
+            "Congratulations! You won the game!\nYour final score: " + model.score(),
+            "Victory!",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+        newGame();
     }
 
     /**
@@ -151,6 +158,13 @@ public class GameFrame extends JFrame implements PropertyChangeListener {
         //   `JOptionPane` documentation to determine an appropriate method to call to produce this
         //   dialog box and understand its parameters. When the dialog is closed by the player, a
         //   new game should be created and shown.
+        JOptionPane.showMessageDialog(
+            this,
+            "Game Over!\nYour final score: " + model.score(),
+            "Defeat",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+        newGame();
     }
 
     @Override
@@ -162,5 +176,13 @@ public class GameFrame extends JFrame implements PropertyChangeListener {
         //  `showLoseMessage()`. You can see other examples of the *observer pattern* in the
         //  `ScoreLabel` and `PlayPauseButton` classes, which should help inform how to structure
         //  this code.
+        if ("game_result".equals(evt.getPropertyName())) {
+            GameState gameState = (GameState) evt.getNewValue();
+            if (gameState == GameState.VICTORY) {
+                showWinMessage();
+            } else if (gameState == GameState.DEFEAT) {
+                showLoseMessage();
+            }
+        }
     }
 }
