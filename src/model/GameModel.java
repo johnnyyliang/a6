@@ -138,7 +138,7 @@ public class GameModel {
         // Uncomment this line after completing TODO 15
         actors.add(new Inky(this));
         // Uncomment this line after completing TODO 16
-        //actors.add(new Clyde(this, randomness.generatorFor("Clyde")));
+        actors.add(new Clyde(this, randomness.generatorFor("Clyde")));
 
         boolean notifyOnEdt = false; // no threads, so false is okay
         propSupport = new SwingPropertyChangeSupport(this, notifyOnEdt);
