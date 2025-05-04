@@ -41,7 +41,15 @@ class MinPQueueTest {
     @Test
     void testAddDistinct() {
         // TODO 10a: Complete this test case
-        fail("Testcase has not been implemented");
+        MinPQueue<Integer> q = new MinPQueue<>();
+        
+        // Add initial element
+        q.addOrUpdate(0, 0);
+        int initialSize = q.size();
+        
+        // Add distinct element
+        q.addOrUpdate(1, 1);
+        assertEquals(initialSize + 1, q.size());
     }
 
     @DisplayName("GIVEN a MinPQueue containing an element x whose priority is not the minimum, "
@@ -52,7 +60,24 @@ class MinPQueueTest {
     @Test
     void testUpdateReduce() {
         // TODO 10b: Complete this test case
-        fail("Testcase has not been implemented");
+        MinPQueue<Integer> q = new MinPQueue<>();
+        
+        // Add elements with x having higher priority
+        q.addOrUpdate(0, 2.0);  // x
+        q.addOrUpdate(1, 1.0);  // current minimum
+        
+        int initialSize = q.size();
+        double newPriority = 0.5;  // new minimum priority
+        
+        // Update x's priority to become minimum
+        q.addOrUpdate(0, newPriority);
+        
+        // Check size unchanged
+        assertEquals(initialSize, q.size());
+        // Check x is now minimum element
+        assertEquals(0, q.peek());
+        // Check x's new priority is minimum
+        assertEquals(newPriority, q.minPriority());
     }
 
     @DisplayName("GIVEN a non-empty MinPQueue, WHEN an element is removed,"
@@ -60,7 +85,20 @@ class MinPQueueTest {
     @Test
     void testRemoveSize() {
         // TODO 10c: Complete this test case
-        fail("Testcase has not been implemented");
+        MinPQueue<Integer> q = new MinPQueue<>();
+        
+        // Test case 1: Size > 1
+        q.addOrUpdate(0, 0);
+        q.addOrUpdate(1, 1);
+        int initialSize = q.size();
+        q.remove();
+        assertEquals(initialSize - 1, q.size());
+        
+        // Test case 2: Size = 1
+        q = new MinPQueue<>();
+        q.addOrUpdate(0, 0);
+        q.remove();
+        assertTrue(q.isEmpty());
     }
 
     @DisplayName("GIVEN a MinPQueue containing elements whose priorities follow their natural "
@@ -133,6 +171,15 @@ class MinPQueueTest {
     @Test
     void testExceptions() {
         // TODO 10d: Complete this test case
-        fail("Testcase has not been implemented");
+        MinPQueue<Integer> q = new MinPQueue<>();
+        
+        // Test peek() on empty queue
+        assertThrows(NoSuchElementException.class, () -> q.peek());
+        
+        // Test minPriority() on empty queue
+        assertThrows(NoSuchElementException.class, () -> q.minPriority());
+        
+        // Test remove() on empty queue
+        assertThrows(NoSuchElementException.class, () -> q.remove());
     }
 }
