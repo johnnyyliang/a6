@@ -330,7 +330,19 @@ public class GameModel {
         //  positioned on `v`, remove it (it was eaten by PacMann). If this was a DOT, increase the
         //  score by 10 and notify "score" observers. If this was a PELLET, increase the score by
         //  50, notify "score" observers, and initiate the FLEE sequence.  Pay careful attention to
-        //  the invariant on`items`.
+        //  the invariant on`items`. `item` only includes the vertices containing DOTs and PELLETs, not NONE.
+
+        //TODO could potentially be .equals(Item.valueOf("DOT")) if error
+        if(itemAt(v).equals(Item.DOT)){
+            addToScore(10);
+            items.remove(v);
+
+            //TODO could potentially be .equals(Item.valueOf("PELLET")) if error
+        } else if(itemAt(v).equals(Item.PELLET)){
+            addToScore(50);
+            items.remove(v);
+            startFlee();
+        }
     }
 
     /**
