@@ -158,53 +158,53 @@ public class MazeGraph {
         //  direction). The weights of these edges should be computed from the elevation difference
         //  between the map tiles they connect using the `edgeWeight()` function.
 
-        //TODO chatted this shit
-        // First pass: Create vertices for all PATH tiles
+        TileType[][] types = map.types();
+        double[][] elevs = map.elevations();
+        // Create vertices for each PATH tile
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (map.types()[i][j] == TileType.PATH) {
-                    vertices.put(new IPair(i, j), new MazeVertex(new IPair(i, j)));
+                if (types[i][j] == TileType.PATH) {
+                    IPair loc = new IPair(i, j);
+                    MazeVertex v = new MazeVertex(loc);
+                    vertices.put(loc, v);
                 }
             }
         }
-
-        // Second pass: Connect vertices with edges
-        for (MazeVertex vertex : vertices.values()) {
-            IPair loc = vertex.loc();
+        // Create edges between adjacent vertices, including wrap-around tunnels
+        for (MazeVertex v : vertices.values()) {
+            IPair loc = v.loc();
             int i = loc.i();
             int j = loc.j();
-
-            // Check all four directions for adjacent PATH tiles
-            // Right edge (including tunnel)
-            int rightI = (i + 1) % width;
-            if (vertices.containsKey(new IPair(rightI, j))) {
-                MazeVertex rightVertex = vertices.get(new IPair(rightI, j));
-                double weight = edgeWeight(map.elevations()[i][j], map.elevations()[rightI][j]);
-                vertex.addOutgoingEdge(new MazeEdge(vertex, rightVertex, Direction.RIGHT, weight));
+            double srcElev = elevs[i][j];
+            int ni, nj;
+            MazeVertex neighbor;
+            // LEFT
+            ni = (i > 0 ? i - 1 : width - 1);
+            nj = j;
+            neighbor = vertices.get(new IPair(ni, nj));
+            if (neighbor != null) {
+                v.addOutgoingEdge(new MazeEdge(v, neighbor, Direction.LEFT, edgeWeight(srcElev, elevs[ni][nj])));
             }
-
-            // Left edge (including tunnel)
-            int leftI = (i - 1 + width) % width;
-            if (vertices.containsKey(new IPair(leftI, j))) {
-                MazeVertex leftVertex = vertices.get(new IPair(leftI, j));
-                double weight = edgeWeight(map.elevations()[i][j], map.elevations()[leftI][j]);
-                vertex.addOutgoingEdge(new MazeEdge(vertex, leftVertex, Direction.LEFT, weight));
+            // RIGHT
+            ni = (i < width - 1 ? i + 1 : 0);
+            nj = j;
+            neighbor = vertices.get(new IPair(ni, nj));
+            if (neighbor != null) {
+                v.addOutgoingEdge(new MazeEdge(v, neighbor, Direction.RIGHT, edgeWeight(srcElev, elevs[ni][nj])));
             }
-
-            // Down edge (including tunnel)
-            int downJ = (j + 1) % height;
-            if (vertices.containsKey(new IPair(i, downJ))) {
-                MazeVertex downVertex = vertices.get(new IPair(i, downJ));
-                double weight = edgeWeight(map.elevations()[i][j], map.elevations()[i][downJ]);
-                vertex.addOutgoingEdge(new MazeEdge(vertex, downVertex, Direction.DOWN, weight));
+            // UP
+            ni = i;
+            nj = (j > 0 ? j - 1 : height - 1);
+            neighbor = vertices.get(new IPair(ni, nj));
+            if (neighbor != null) {
+                v.addOutgoingEdge(new MazeEdge(v, neighbor, Direction.UP, edgeWeight(srcElev, elevs[ni][nj])));
             }
-
-            // Up edge (including tunnel)
-            int upJ = (j - 1 + height) % height;
-            if (vertices.containsKey(new IPair(i, upJ))) {
-                MazeVertex upVertex = vertices.get(new IPair(i, upJ));
-                double weight = edgeWeight(map.elevations()[i][j], map.elevations()[i][upJ]);
-                vertex.addOutgoingEdge(new MazeEdge(vertex, upVertex, Direction.UP, weight));
+            // DOWN
+            ni = i;
+            nj = (j < height - 1 ? j + 1 : 0);
+            neighbor = vertices.get(new IPair(ni, nj));
+            if (neighbor != null) {
+                v.addOutgoingEdge(new MazeEdge(v, neighbor, Direction.DOWN, edgeWeight(srcElev, elevs[ni][nj])));
             }
         }
     }
