@@ -247,15 +247,6 @@ public class MazeGraphTest {
         // There should be 8 path tiles in a ring
         assertEquals(8, vertices.size());
         
-        // Debug prints for all vertices
-        for (MazeVertex v : vertices.values()) {
-            System.out.println("Vertex at " + v.loc());
-            for (Direction d : Direction.values()) {
-                MazeEdge e = v.edgeInDirection(d);
-                System.out.println("  Edge " + d + ": " + (e != null ? e.dst().loc() : "null"));
-            }
-        }
-        
         // Check that each vertex has two outgoing edges (since it's a ring)
         for (MazeVertex v : vertices.values()) {
             int count = 0;
@@ -339,13 +330,6 @@ public class MazeGraphTest {
         MazeVertex center = vertices.get(new IPair(3,2));
         assertNotNull(center);
         
-        // Debug prints
-        System.out.println("Center vertex at " + center.loc());
-        for (Direction d : Direction.values()) {
-            MazeEdge e = center.edgeInDirection(d);
-            System.out.println("Center edge " + d + ": " + (e != null ? e.dst().loc() : "null"));
-        }
-        
         // Check center's outgoing edges
         assertNotNull(center.edgeInDirection(Direction.LEFT), "Center should have edge LEFT");  // to (2,2)
         assertNull(center.edgeInDirection(Direction.UP), "Center should not have edge UP");    // to (3,1) - WALL
@@ -355,11 +339,6 @@ public class MazeGraphTest {
         // Check other vertices' outgoing edges
         MazeVertex left = vertices.get(new IPair(2,2));
         assertNotNull(left);
-        System.out.println("Left vertex at " + left.loc());
-        for (Direction d : Direction.values()) {
-            MazeEdge e = left.edgeInDirection(d);
-            System.out.println("Left edge " + d + ": " + (e != null ? e.dst().loc() : "null"));
-        }
         assertNotNull(left.edgeInDirection(Direction.LEFT), "Left should have edge LEFT");   // to (1,2)
         assertNotNull(left.edgeInDirection(Direction.RIGHT), "Left should have edge RIGHT");   // to center
         assertNull(left.edgeInDirection(Direction.UP));
@@ -367,11 +346,6 @@ public class MazeGraphTest {
         
         MazeVertex down = vertices.get(new IPair(3,3));
         assertNotNull(down);
-        System.out.println("Down vertex at " + down.loc());
-        for (Direction d : Direction.values()) {
-            MazeEdge e = down.edgeInDirection(d);
-            System.out.println("Down edge " + d + ": " + (e != null ? e.dst().loc() : "null"));
-        }
         assertNotNull(down.edgeInDirection(Direction.UP), "Down should have edge UP");      // to center
         assertNull(down.edgeInDirection(Direction.LEFT));
         assertNull(down.edgeInDirection(Direction.RIGHT));
