@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Timer;
 import javax.swing.event.SwingPropertyChangeSupport;
 import model.GameModel;
+import model.GameModel.GameState;
 import model.MazeGraph.Direction;
 
 public class InteractiveGameController implements KeyListener {
@@ -68,6 +69,24 @@ public class InteractiveGameController implements KeyListener {
         //  should have the same effect as pressing the start/pause button in the GUI. Also, when
         //  directional commands are entered when the game is PAUSED or between lives (in state
         //  LIFESTART), the game should begin RUNNING and the timer should start.
+        int key = e.getKeyCode();
+
+        if((state() == GameState.PAUSED) || (state() == GameState.LIFESTART)){
+            setState(GameState.RUNNING);
+            timer.start();
+        }
+
+        if ((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_W)){
+            model.updatePlayerCommand(Direction.UP);
+        } else if ((key == KeyEvent.VK_LEFT) || (key == KeyEvent.VK_A)){
+            model.updatePlayerCommand(Direction.LEFT);
+        } else if ((key == KeyEvent.VK_DOWN) || (key == KeyEvent.VK_S)){
+            model.updatePlayerCommand(Direction.DOWN);
+        } else if ((key == KeyEvent.VK_RIGHT) || (key == KeyEvent.VK_D)){
+            model.updatePlayerCommand(Direction.RIGHT);
+        } else if ((key == KeyEvent.VK_SPACE)) {
+            processStartPause();
+        }
     }
 
     @Override

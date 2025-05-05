@@ -416,7 +416,7 @@ public class GameModel {
     /**
      * Updates the 'playerCommand' with the direction associated with the most recent player input
      */
-    private void updatePlayerCommand(Direction recentCommand){
+    public void updatePlayerCommand(Direction recentCommand){
         playerCommand = recentCommand;
     }
 
