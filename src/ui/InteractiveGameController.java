@@ -71,19 +71,18 @@ public class InteractiveGameController implements KeyListener {
         //  LIFESTART), the game should begin RUNNING and the timer should start.
         int key = e.getKeyCode();
 
-        if((state() == GameState.PAUSED) || (state() == GameState.LIFESTART)){
-            setState(GameState.RUNNING);
-            timer.start();
-        }
-
         if ((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_W)){
             model.updatePlayerCommand(Direction.UP);
+            start();
         } else if ((key == KeyEvent.VK_LEFT) || (key == KeyEvent.VK_A)){
             model.updatePlayerCommand(Direction.LEFT);
+            start();
         } else if ((key == KeyEvent.VK_DOWN) || (key == KeyEvent.VK_S)){
             model.updatePlayerCommand(Direction.DOWN);
+            start();
         } else if ((key == KeyEvent.VK_RIGHT) || (key == KeyEvent.VK_D)){
             model.updatePlayerCommand(Direction.RIGHT);
+            start();
         } else if ((key == KeyEvent.VK_SPACE)) {
             processStartPause();
         }
@@ -107,6 +106,16 @@ public class InteractiveGameController implements KeyListener {
             setState(GameState.PAUSED);
         } else if (state == GameState.LIFESTART) {
 //            model.useLife();
+            setState(GameState.RUNNING);
+            timer.start();
+        }
+    }
+
+    /**
+     * starts the game if game is in PAUSED or LIFESTART state. Helper function for keyPressed()
+     */
+    public void start(){
+        if((state() == GameState.PAUSED) || (state() == GameState.LIFESTART)){
             setState(GameState.RUNNING);
             timer.start();
         }

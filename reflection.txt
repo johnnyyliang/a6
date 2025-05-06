@@ -2,10 +2,10 @@
 
 ## Submitter metadata
 
-Partner 1: Firstname Lastname (NetID)  - TODO
-Partner 2: Firstname Lastname (NetID)  - delete if working solo
+Partner 1: Gavin Nguyen (gjn36)
+Partner 2: Johnathan Liang (jl4482)
 
-Hours spent working on this assignment: 0.0  - TODO
+Hours spent working on this assignment: 30.0
 
 ## Verification questions
 
