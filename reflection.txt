@@ -16,15 +16,18 @@ play the game and report on the following items:
 
 1. How many pellets (i.e., the big circles) did PacMann eat?
 
-   Answer: TODO
+   Answer: gjn36 - 3
+           jl4482 -
 
 2. During each of the FLEE sequences, how many ghosts did PacMann eat?
 
-   Answer: TODO
+   Answer: gjn36 - 10
+           jl4482 -
 
 3. What was your final score?
 
-   Answer: TODO
+   Answer: gjn36 - 8900
+           jl4482 -
 
 ## Reflection questions
 
