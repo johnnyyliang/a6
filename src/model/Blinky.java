@@ -22,10 +22,8 @@ public class Blinky extends Ghost {
     @Override
     protected MazeVertex target() {
         if (state == GhostState.CHASE) {
-            // In CHASE state, Blinky directly targets PacMann's location
             return model.pacMann().nearestVertex();
-        } else { // FLEE state
-            // In FLEE state, Blinky targets the northwest corner (2,2)
+        } else {
             return model.graph().closestTo(2, 2);
         }
     }
