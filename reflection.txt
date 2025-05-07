@@ -17,17 +17,17 @@ play the game and report on the following items:
 1. How many pellets (i.e., the big circles) did PacMann eat?
 
    Answer: gjn36 - 3
-           jl4482 -
+           jl4482 - 4
 
 2. During each of the FLEE sequences, how many ghosts did PacMann eat?
 
    Answer: gjn36 - 10
-           jl4482 -
+           jl4482 - 7
 
 3. What was your final score?
 
    Answer: gjn36 - 8900
-           jl4482 -
+           jl4482 - 5940
 
 ## Reflection questions
 
@@ -35,7 +35,15 @@ play the game and report on the following items:
    the maze via a BFS/DFS search, or did you iterate directly over the tile grid
    to locate edges? Why did you choose this approach?
    
-   Answer: TODO
+   Answer: 
+   
+   We constructed our graph by iterating over the tile grid. 
+   We identified all PATH tiles in the maze and then stored each vertex 
+   in a hashmap with their grid coordinates as keys. Then, for each vertex,
+   we looked at the four possible directions to find neighboring PATH tiles, 
+   creating edges between connected vertices. The edge weights were calculated based on elevation differences between tiles. 
+   We chose this direct iteration approach because we already had complete information about the maze. 
+   This approach allowed us to build a complete representation of all possible movements in the maze.
 
 2. In the original Pac-Man game, a piece of fruit appeared at a predetermined 
    position on the board once Pac-Man had eaten 70 dots and remained on the screen 
@@ -43,11 +51,34 @@ play the game and report on the following items:
    you could add this feature to your PacMann game. Which files, fields, or methods 
    would you need to edit / add? 
 
-   Answer: TODO
+   Answer: 
+   
+   To add the fruit feature, I would first add a new Fruit Item in GameModel.java. 
+   I would also add new fields to 
+   GameModel such as dots eaten, a boolean if fruit is active, 
+   a timer for fruit, and fruit position. In the 
+   placeDotsAndPellets() method, I would designate a fixed position for the fruit 
+   to appear. I would modify the processPacMannArrival() method to increment the 
+   dots counter when dots are eaten, and to check if 70 dots have been consumed 
+   to trigger the fruit appearance. I would create a new method activateFruit() 
+   to place the fruit at the predetermined position and start a 9-second timer. 
+   The update() method in GameController would need to be modified to check if 
+   the fruit timer has expired and remove the fruit if necessary. Finally, I 
+   would update processPacMannArrival() to check if PacMann has eaten the fruit, 
+   award bonus points (e.g., 100 points), and remove the fruit. The GameBoard.java 
+   file would also need to be updated to render the fruit on the board, 
+   adding a new case to the paintVertex method.
 
 (Answer RQ3 only if you completed the challenge extension, otherwise delete it.)
 
 3. In a couple of sentences, explain the strategy employed by your PacMannAI.
 
-   Answer: TODO
+   Answer: 
+   
+   Our PacMannAI prioritizes collecting pellets first and dots second while 
+   avoiding ghosts. When not in danger, it finds the nearest target item and 
+   navigates via the shortest non-backtracking path. When ghosts are nearby, 
+   it switches to survival mode by evaluating the safety of potential moves 
+   and choosing paths that maximize distance from ghosts, with a preference 
+   for paths that also collect items when safe.
 
