@@ -139,7 +139,6 @@ public class MazeGraphTest {
             + "`MazeGraph.edgeWeight` on their elevations.")
     @Test
     void testTwoPathCellsVertical() {
-        // TODO 2a: Complete this test case
         GameMap map = createMap("""
                 wwwww
                 wwwpw
@@ -188,7 +187,6 @@ public class MazeGraphTest {
             + "row, THEN (tunnel) edges are created between these tiles with the correct properties.")
     @Test
     void testHorizontalTunnelEdgeCreation() {
-        // TODO 2b: Complete this test case
         GameMap map = createMap("""
                 pwwwp
                 wwwww
@@ -242,10 +240,9 @@ public class MazeGraphTest {
 
         Map<IPair, MazeVertex> vertices = new HashMap<>();
         graph.vertices().forEach(v -> vertices.put(v.loc(), v));
-        // There should be 8 path tiles in a ring
+
         assertEquals(8, vertices.size());
         
-        // Check that each vertex has two outgoing edges (since it's a ring)
         for (MazeVertex v : vertices.values()) {
             int count = 0;
             for (Direction d : Direction.values()) {
@@ -253,66 +250,53 @@ public class MazeGraphTest {
             }
             assertEquals(2, count, "Each ring vertex should have 2 outgoing edges");
         }
-        
-        // Check specific connections based on actual output
-        // Top-left corner (2,2)
+
         assertNull(vertices.get(new IPair(2,2)).edgeInDirection(Direction.LEFT));
         assertNotNull(vertices.get(new IPair(2,2)).edgeInDirection(Direction.RIGHT));
         assertNull(vertices.get(new IPair(2,2)).edgeInDirection(Direction.UP));
         assertNotNull(vertices.get(new IPair(2,2)).edgeInDirection(Direction.DOWN));
-        
-        // Top-middle (3,2)
+
         assertNotNull(vertices.get(new IPair(3,2)).edgeInDirection(Direction.LEFT));
         assertNotNull(vertices.get(new IPair(3,2)).edgeInDirection(Direction.RIGHT));
         assertNull(vertices.get(new IPair(3,2)).edgeInDirection(Direction.UP));
         assertNull(vertices.get(new IPair(3,2)).edgeInDirection(Direction.DOWN));
         
-        // Top-right (4,2)
         assertNotNull(vertices.get(new IPair(4,2)).edgeInDirection(Direction.LEFT));
         assertNull(vertices.get(new IPair(4,2)).edgeInDirection(Direction.RIGHT));
         assertNull(vertices.get(new IPair(4,2)).edgeInDirection(Direction.UP));
         assertNotNull(vertices.get(new IPair(4,2)).edgeInDirection(Direction.DOWN));
         
-        // Right-middle (4,3)
         assertNull(vertices.get(new IPair(4,3)).edgeInDirection(Direction.LEFT));
         assertNull(vertices.get(new IPair(4,3)).edgeInDirection(Direction.RIGHT));
         assertNotNull(vertices.get(new IPair(4,3)).edgeInDirection(Direction.UP));
         assertNotNull(vertices.get(new IPair(4,3)).edgeInDirection(Direction.DOWN));
         
-        // Bottom-right (4,4)
         assertNotNull(vertices.get(new IPair(4,4)).edgeInDirection(Direction.LEFT));
         assertNull(vertices.get(new IPair(4,4)).edgeInDirection(Direction.RIGHT));
         assertNotNull(vertices.get(new IPair(4,4)).edgeInDirection(Direction.UP));
         assertNull(vertices.get(new IPair(4,4)).edgeInDirection(Direction.DOWN));
         
-        // Bottom-middle (3,4)
         assertNotNull(vertices.get(new IPair(3,4)).edgeInDirection(Direction.LEFT));
         assertNotNull(vertices.get(new IPair(3,4)).edgeInDirection(Direction.RIGHT));
         assertNull(vertices.get(new IPair(3,4)).edgeInDirection(Direction.UP));
         assertNull(vertices.get(new IPair(3,4)).edgeInDirection(Direction.DOWN));
         
-        // Bottom-left (2,4)
         assertNull(vertices.get(new IPair(2,4)).edgeInDirection(Direction.LEFT));
         assertNotNull(vertices.get(new IPair(2,4)).edgeInDirection(Direction.RIGHT));
         assertNotNull(vertices.get(new IPair(2,4)).edgeInDirection(Direction.UP));
         assertNull(vertices.get(new IPair(2,4)).edgeInDirection(Direction.DOWN));
         
-        // Left-middle (2,3)
         assertNull(vertices.get(new IPair(2,3)).edgeInDirection(Direction.LEFT));
         assertNull(vertices.get(new IPair(2,3)).edgeInDirection(Direction.RIGHT));
         assertNotNull(vertices.get(new IPair(2,3)).edgeInDirection(Direction.UP));
         assertNotNull(vertices.get(new IPair(2,3)).edgeInDirection(Direction.DOWN));
         
-        // Check that the center vertex (3,3) has no edges
         assertNull(vertices.get(new IPair(3,3)));
     }
 
-    // TODO 2d: Add at least two additional test cases that test other distinct path structures.
-    //It is crucial that your graph is being linked together correctly, otherwise the later
-    //portions of the assignment will break with strange behaviors.
     @Test
-    @DisplayName("Given a T-junction, the center vertex has three outgoing edges and the others have one.")
-    void testTJunction() {
+    @DisplayName("Given a T intersection, the center vertex has three outgoing edges and the others have one.")
+    void testTIntersection() {
         GameMap map = createMap("""
                 wwwww
                 wwwww
@@ -418,7 +402,6 @@ public class MazeGraphTest {
         assertEquals(MazeGraph.edgeWeight(bElev, tElev), b2t.weight());
     }
 
-    // Helper for counting edges
     private int countEdges(MazeVertex v) {
         int count = 0;
         for (Direction d : Direction.values()) {

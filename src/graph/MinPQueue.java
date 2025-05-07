@@ -34,7 +34,6 @@ public class MinPQueue<KeyType> {
      */
     private final Map<KeyType, Integer> index;
 
-    // TODO 7: Write an assertInv() method that asserts that all of the class invariants are satisfied.
     /**
      * Assert that all the class invariants are satisfied
      */
@@ -101,20 +100,15 @@ public class MinPQueue<KeyType> {
      * {@code 0 <= i,j < heap.size()}.
      */
     private void swap(int i, int j) {
-        // TODO 8a: Implement this method according to its specification
         Entry<KeyType> ei = heap.get(i);
         Entry<KeyType> ej = heap.get(j);
 
         heap.set(i, ej);
         heap.set(j, ei);
 
-        // Update mappings so that they point at the new positions
         index.put(ej.key(), i);
         index.put(ei.key(), j);
     }
-
-    // TODO 8b: Implement private helper methods for bubbling entries up and down in the heap.
-    //  Their interfaces are up to you, but you must write precise specifications.
 
     /**
      * Restore the heap property by repeatedly swapping the element at i with its parent
@@ -162,7 +156,6 @@ public class MinPQueue<KeyType> {
      * contained in this queue.
      */
     private void add(KeyType key, double priority) {
-        // TODO 9a: Implement this method according to its specification
         assert !index.containsKey(key);
 
         int pos = heap.size();
@@ -180,7 +173,6 @@ public class MinPQueue<KeyType> {
     private void update(KeyType key, double priority) {
         assert index.containsKey(key);
 
-        // TODO 9b: Implement this method according to its specification
         int pos = index.get(key);
         Entry<KeyType> eOld = heap.get(pos);
 
@@ -218,7 +210,6 @@ public class MinPQueue<KeyType> {
      * Throws NoSuchElementException if this queue is empty.
      */
     public KeyType remove() {
-        // TODO 9c: Implement this method according to its specification
         if (heap.isEmpty()) {
             throw new NoSuchElementException();
         }

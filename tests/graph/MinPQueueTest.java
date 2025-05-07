@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class MinPQueueTest {
 
-    // TODO 9: Complete the definition of the empty test cases so that they match their
-    //   `@DisplayName` descriptions. Some complete tests have been provided as a reference.
+
 
     @DisplayName("WHEN a new MinPQueue is created, THEN its size will be 0 AND it will be empty")
     @Test
@@ -40,7 +39,6 @@ class MinPQueueTest {
             + "THEN its size will increase by 1")
     @Test
     void testAddDistinct() {
-        // TODO 10a: Complete this test case
         MinPQueue<Integer> q = new MinPQueue<>();
         
         q.addOrUpdate(0, 0);
@@ -57,7 +55,6 @@ class MinPQueueTest {
             + "AND getting the minimum priority will return x's updated priority")
     @Test
     void testUpdateReduce() {
-        // TODO 10b: Complete this test case
         MinPQueue<Integer> q = new MinPQueue<>();
         
         q.addOrUpdate(0, 2.0); 
@@ -77,7 +74,6 @@ class MinPQueueTest {
             + " THEN it size will decrease by 1.  IF its size was 1, THEN it will become empty.")
     @Test
     void testRemoveSize() {
-        // TODO 10c: Complete this test case
         MinPQueue<Integer> q = new MinPQueue<>();
         
         q.addOrUpdate(0, 0);
@@ -161,7 +157,6 @@ class MinPQueueTest {
             + "THEN a NoSuchElementException will be thrown")
     @Test
     void testExceptions() {
-        // TODO 10d: Complete this test case
         MinPQueue<Integer> q = new MinPQueue<>();
         
         assertThrows(NoSuchElementException.class, () -> q.peek());

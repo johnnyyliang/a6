@@ -14,12 +14,6 @@ import static graph.SimpleGraph.*;
  * Uses the `SimpleGraph` class to verify the functionality of the `Pathfinding` class.
  */
 public class PathfindingTest {
-
-    // TODO 12: Complete the definition of the empty test cases so that they match their
-    //  `@DisplayName` descriptions. We have provided two complete test cases as examples, as
-    //   well as some helper methods for constructing graphs and checking paths that will likely
-    //   be useful.
-
     /*
      * Text graph format ([weight] is optional):
      * Directed edge: startLabel -> endLabel [weight]
@@ -95,7 +89,6 @@ public class PathfindingTest {
                 + "from being reached.")
         @Test
         void testStronglyConnectedPreviousStillReachable() {
-            // TODO 12a: Complete this test case
             SimpleGraph g = SimpleGraph.fromText(graph1);
             SimpleVertex va = g.getVertex("A");
             SimpleVertex vb = g.getVertex("B");
@@ -118,7 +111,6 @@ public class PathfindingTest {
                 + "shortest non-backtracking path.")
         @Test
         void testBacktrackingShorter() {
-            // TODO 12b: Complete this test case
             String graphText = """
                     A -> B 1
                     B -> C 1
@@ -150,7 +142,6 @@ public class PathfindingTest {
         @DisplayName("In a graph where some shortest path includes at least 3 edges.")
         @Test
         void testLongerPaths() {
-            // TODO 12c: Complete this test case
             String graphText = """
                     A -> B 1
                     B -> C 2
@@ -241,8 +232,6 @@ public class PathfindingTest {
         @DisplayName("When the shortest non-backtracking path consists of a single edge.")
         @Test
         void testOneEdgePath() {
-            // TODO 12d: Complete this test case
-            // Create a graph with direct and indirect paths
             String graphText = """
                     A -> B 5
                     A -> C 1
@@ -265,7 +254,6 @@ public class PathfindingTest {
         @DisplayName("Path is empty when `src` and `dst` are the same.")
         @Test
         void testEmptyPath() {
-            // TODO 12e: Complete this test case
             SimpleGraph g = SimpleGraph.fromText(graph2);
             SimpleVertex va = g.getVertex("A");
             
@@ -288,7 +276,6 @@ public class PathfindingTest {
                 + "from `src` to `dst`.")
         @Test
         void testNonBacktrackingPreventsPath() {
-            // TODO 12f: Complete this test case
             String graphText = """
                     A -> B 1
                     B -> C 1
@@ -322,7 +309,6 @@ public class PathfindingTest {
                 + "them is returned")
         @Test
         void testMultipleShortestPaths() {
-            // TODO 12g: Complete this test case
             String graphText = """
                     A -> B 5
                     A -> C 5

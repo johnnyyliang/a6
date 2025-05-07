@@ -152,12 +152,6 @@ public class MazeGraph {
         height = map.types()[0].length;
         vertices = new HashMap<>();
 
-        // TODO 1: Complete the implementation of this method. Upon return, `vertices` should
-        //  contain an entry for each location in `map` with type `PATH`.  Every pair of
-        //  orthogonally-adjacent vertices should be connected by a pair of edges (one in each
-        //  direction). The weights of these edges should be computed from the elevation difference
-        //  between the map tiles they connect using the `edgeWeight()` function.
-
         TileType[][] types = map.types();
         double[][] elev = map.elevations();
         for (int i = 0; i < width; i++) {

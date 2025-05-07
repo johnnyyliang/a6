@@ -91,9 +91,6 @@ public class GameModel {
      */
     private int numLives;
 
-    // TODO 4: Add a field to keep track of the Direction associated with the most recent player
-    //  input.  Also, add a `playerCommand()` accessor and an `updatePlayerCommand()` mutator method
-    //  for this field.
     /**
      * The Direction associated with the most recent player input
      */
@@ -126,18 +123,10 @@ public class GameModel {
         state = GameState.READY;
 
         actors = new ArrayList<>();
-        // Uncomment this line after completing TODO 6
-        //actors.add(new PacMannManual(this));
-        // TODO (challenge extension): Replace the above line with the following after completing
-        //  the challenge extension
         actors.add(withAI ? new PacMannAI(this) : new PacMannManual(this));
-        // Uncomment this line after completing TODO 13
         actors.add(new Blinky(this));
-        // Uncomment this line after completing TODO 14
         actors.add(new Pinky(this));
-        // Uncomment this line after completing TODO 15
         actors.add(new Inky(this));
-        // Uncomment this line after completing TODO 16
         actors.add(new Clyde(this, randomness.generatorFor("Clyde")));
 
         boolean notifyOnEdt = false; // no threads, so false is okay
@@ -193,7 +182,6 @@ public class GameModel {
      * Accessor methods                                               *
      **************************************************************** */
 
-    //TODO 4 ACCESSOR
     /**
      * Returns the direction associated with the most recent player input
      */
@@ -336,19 +324,10 @@ public class GameModel {
     public void processPacMannArrival() {
         MazeVertex v = pacMann().nearestVertex();
 
-        // TODO 3: Update the model based on PacMann's arrival at vertex `v`. If there is an item
-        //  positioned on `v`, remove it (it was eaten by PacMann). If this was a DOT, increase the
-        //  score by 10 and notify "score" observers. If this was a PELLET, increase the score by
-        //  50, notify "score" observers, and initiate the FLEE sequence.  Pay careful attention to
-        //  the invariant on`items`. `item` only includes the vertices containing DOTs and PELLETs,
-        //  not NONE.
-
-        //TODO could potentially be .equals(Item.valueOf("DOT")) if error
         if(itemAt(v).equals(Item.DOT)){
             addToScore(10);
             items.remove(v);
 
-            //TODO could potentially be .equals(Item.valueOf("PELLET")) if error
         } else if(itemAt(v).equals(Item.PELLET)){
             addToScore(50);
             items.remove(v);
@@ -411,7 +390,6 @@ public class GameModel {
         setState(GameState.VICTORY);
         propSupport.firePropertyChange("game_result", null, GameState.VICTORY);
     }
-    //TODO 4
 
     /**
      * Updates the 'playerCommand' with the direction associated with the most recent player input
