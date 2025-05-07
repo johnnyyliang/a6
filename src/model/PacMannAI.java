@@ -8,9 +8,6 @@ import model.MazeGraph.MazeEdge;
 import model.MazeGraph.MazeVertex;
 import model.Ghost;
 
-/**
- * PacMannAI focused on point collection and ghost avoidance.
- */
 public class PacMannAI extends PacMann {
     
     private static final double GHOST_DANGER = 5.0;
@@ -146,7 +143,10 @@ public class PacMannAI extends PacMann {
         
         return minGhostDist;
     }
-    
+
+    /**
+     * Helper method to calculate distance
+     */
     private double distance(MazeVertex v1, MazeVertex v2) {
         int dx = v1.loc().i() - v2.loc().i();
         int dy = v1.loc().j() - v2.loc().j();

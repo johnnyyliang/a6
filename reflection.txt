@@ -37,13 +37,13 @@ play the game and report on the following items:
    
    Answer: 
    
-   We constructed our graph by iterating over the tile grid. 
-   We identified all PATH tiles in the maze and then stored each vertex 
-   in a hashmap with their grid coordinates as keys. Then, for each vertex,
-   we looked at the four possible directions to find neighboring PATH tiles, 
-   creating edges between connected vertices. The edge weights were calculated based on elevation differences between tiles. 
-   We chose this direct iteration approach because we already had complete information about the maze. 
-   This approach allowed us to build a complete representation of all possible movements in the maze.
+   We constructed our graph by iterating over the tile grid. We identified all PATH tiles in the
+   maze and then stored each vertex in a hashmap with their grid coordinates as keys. Then, for each
+   vertex, we looked at the four possible directions to find neighboring PATH tiles, creating edges
+   between connected vertices. The edge weights were calculated based on elevation differences
+   between tiles. We chose this direct iteration approach because we already had complete
+   information about the maze. This approach allowed us to build a complete representation of all
+   possible movements in the maze.
 
 2. In the original Pac-Man game, a piece of fruit appeared at a predetermined 
    position on the board once Pac-Man had eaten 70 dots and remained on the screen 
@@ -52,22 +52,22 @@ play the game and report on the following items:
    would you need to edit / add? 
 
    Answer: 
-   
-   To add the fruit feature, I would first add a new Fruit Item in GameModel.java. 
-   I would also add new fields to 
-   GameModel such as dots eaten, a boolean if fruit is active, 
-   a timer for fruit, and fruit position. In the 
-   placeDotsAndPellets() method, I would designate a fixed position for the fruit 
-   to appear. I would modify the processPacMannArrival() method to increment the 
-   dots counter when dots are eaten, and to check if 70 dots have been consumed 
-   to trigger the fruit appearance. I would create a new method activateFruit() 
-   to place the fruit at the predetermined position and start a 9-second timer. 
-   The update() method in GameController would need to be modified to check if 
-   the fruit timer has expired and remove the fruit if necessary. Finally, I 
-   would update processPacMannArrival() to check if PacMann has eaten the fruit, 
-   award bonus points (e.g., 100 points), and remove the fruit. The GameBoard.java 
-   file would also need to be updated to render the fruit on the board, 
-   adding a new case to the paintVertex method.
+
+   We could add this fruit feature to our PacMann game by first adding a new Fruit item in
+   GameModel.java. We could then add new fields to GameModel, such as an int dotsEaten, to keep
+   track of how many dots were eaten to determine if a fruit should appear. We could add a boolean
+   field fruitActive to determine if the fruit should be active, which could be set as true if the
+   conditions for a fruit appearing were fulfilled. Additionally, a timer for fruit should be added
+   so that it actually stays on screen for only 9 seconds. In the placeDotsAndPellets() method, we
+   would need to designate a fixed position for the fruit to appear. We should also modify the
+   processPacMannArrival() method to increment dotsEaten when dots are eaten, and to check
+   if 70 dots have been consumed to trigger the fruit appearance. We should also create a new method
+   called activateFruit() to place the fruit at the predetermined position and start a 9-second
+   timer. We would also need to edit the update() method in GameController so that it can check if
+   the fruit timer has expired and remove the fruit if necessary. We should also edit the
+   processPacMannArrival() method to check if PacMann has eaten the fruit, award bonus points, and
+   then remove the fruit. The GameBoard.java file would also need to be updated to render the fruit
+   on the board, adding a new case to the paintVertex method.
 
 (Answer RQ3 only if you completed the challenge extension, otherwise delete it.)
 
@@ -75,10 +75,10 @@ play the game and report on the following items:
 
    Answer: 
    
-   Our PacMannAI prioritizes collecting pellets first and dots second while 
-   avoiding ghosts. When not in danger, it finds the nearest target item and 
-   navigates via the shortest non-backtracking path. When ghosts are nearby, 
-   it switches to survival mode by evaluating the safety of potential moves 
-   and choosing paths that maximize distance from ghosts, with a preference 
-   for paths that also collect items when safe.
+   Essentially, our PacMannAI employs the strategy in which PacMann prioritizes collecting pellets,
+   then dots while avoiding ghosts. It 'avoids' ghosts by maintaining a distance from the ghosts. It
+   does this by saying that PacMann is in danger if ghosts are too close, in which, PacMann finds a
+   path away from ghosts which try to maximize distance from the ghosts. If possible, it tries to
+   pick paths that also collect items when PacMann is safe. While PacMann is not in danger, it finds
+   the nearest prioritized item and navigates to it.
 
