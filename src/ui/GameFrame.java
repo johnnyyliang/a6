@@ -142,7 +142,7 @@ public class GameFrame extends JFrame implements PropertyChangeListener {
         //   a new game should be created and shown.
         JOptionPane.showMessageDialog(
             this,
-            "Congratulations! You won the game!\nYour final score: " + model.score(),
+            "Congratulations! You Won!\nFinal Score: " + model.score(),
             "Victory!",
             JOptionPane.INFORMATION_MESSAGE
         );
@@ -160,8 +160,8 @@ public class GameFrame extends JFrame implements PropertyChangeListener {
         //   new game should be created and shown.
         JOptionPane.showMessageDialog(
             this,
-            "Game Over!\nYour final score: " + model.score(),
-            "Defeat",
+            "Sorry! Game Over!\nFinal Score: " + model.score(),
+            "Defeat!",
             JOptionPane.INFORMATION_MESSAGE
         );
         newGame();
@@ -177,10 +177,9 @@ public class GameFrame extends JFrame implements PropertyChangeListener {
         //  `ScoreLabel` and `PlayPauseButton` classes, which should help inform how to structure
         //  this code.
         if ("game_result".equals(evt.getPropertyName())) {
-            GameState gameState = (GameState) evt.getNewValue();
-            if (gameState == GameState.VICTORY) {
+            if (evt.getNewValue() == GameState.VICTORY) {
                 showWinMessage();
-            } else if (gameState == GameState.DEFEAT) {
+            } else if (evt.getNewValue() == GameState.DEFEAT) {
                 showLoseMessage();
             }
         }

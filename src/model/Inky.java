@@ -21,17 +21,14 @@ public class Inky extends Ghost {
     @Override
     protected MazeVertex target() {
         if (state == GhostState.CHASE) {
-            // In CHASE state, Inky targets the midpoint between Blinky and PacMann
-            MazeVertex blinkyPos = model.blinky().nearestVertex();
-            MazeVertex pacMannPos = model.pacMann().nearestVertex();
-            
-            // Calculate the midpoint between Blinky and PacMann
-            int midpointI = (blinkyPos.loc().i() + pacMannPos.loc().i()) / 2;
-            int midpointJ = (blinkyPos.loc().j() + pacMannPos.loc().j()) / 2;
-            
-            return model.graph().closestTo(midpointI, midpointJ);
-        } else { // FLEE state
-            // In FLEE state, Inky targets the southwest corner (2, height-3)
+            int iMid = (model.blinky().nearestVertex().loc().i()
+                    + model.pacMann().nearestVertex().loc().i()) / 2;
+
+            int jMid = (model.blinky().nearestVertex().loc().j()
+                    + model.pacMann().nearestVertex().loc().j()) / 2;
+
+            return model.graph().closestTo(iMid, jMid);
+        } else {
             return model.graph().closestTo(2, model.height() - 3);
         }
     }
