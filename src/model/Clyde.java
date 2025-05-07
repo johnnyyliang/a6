@@ -14,11 +14,7 @@ public class Clyde extends Ghost {
     private final Random random;
     
     /**
-     * Constructs a new Clyde ghost with the orange color, 8-second initial delay,
-     * and a random number generator for erratic behavior.
-     * 
-     * @param model the game model this ghost is part of
-     * @param random random number generator for unpredictable movements
+     * Constructs a new Clyde ghost (orange) with 8 second delay
      */
     public Clyde(GameModel model, Random random) {
         super(model, Color.ORANGE, 8000);
@@ -28,7 +24,6 @@ public class Clyde extends Ghost {
     @Override
     protected MazeVertex target() {
         if (state == GhostState.CHASE) {
-            // Calculate Euclidean distance between Clyde and PacMann
             MazeVertex clydePos = nearestVertex();
             MazeVertex pacMannPos = model.pacMann().nearestVertex();
             
@@ -36,17 +31,14 @@ public class Clyde extends Ghost {
             int dy = clydePos.loc().j() - pacMannPos.loc().j();
             double distance = Math.sqrt(dx * dx + dy * dy);
             
-            // If distance is 10 or more, target PacMann directly (like Blinky)
             if (distance >= 10) {
                 return pacMannPos;
             } else {
-                // Otherwise, choose random coordinates within the maze
                 int randomI = random.nextInt(model.width());
                 int randomJ = random.nextInt(model.height());
                 return model.graph().closestTo(randomI, randomJ);
             }
-        } else { // FLEE state
-            // In FLEE state, Clyde targets the southeast corner (width-3, height-3)
+        } else {
             return model.graph().closestTo(model.width() - 3, model.height() - 3);
         }
     }

@@ -117,12 +117,7 @@ public class MinPQueue<KeyType> {
     //  Their interfaces are up to you, but you must write precise specifications.
 
     /**
-     * Restore the heap property by repeatedly swapping the element at {@code i} with its parent
-     * while its priority is **less** than the parent’s priority.  Requires
-     * {@code 0 <= i < heap.size()} and the heap property may only be violated on the path from
-     * {@code i} up to the root.
-     *
-     * @return the final index of the element that started at {@code i}.
+     * Restore the heap property by repeatedly swapping the element at i with its parent
      */
     private int bubbleUp(int i) {
         while (i > 0) {
@@ -138,21 +133,15 @@ public class MinPQueue<KeyType> {
     }
 
     /**
-     * Restore the heap property by repeatedly swapping the element at {@code i} with its smaller
-     * child while its priority is **greater** than that child’s priority.  Requires
-     * {@code 0 <= i < heap.size()} and the heap property may only be violated on the path from
-     * {@code i} down toward the leaves.
-     *
-     * @return the final index of the element that started at {@code i}.
+     * Restore the heap property by repeatedly swapping the element at i with its smaller child
      */
     private int bubbleDown(int i) {
         int n = heap.size();
         while (true) {
             int left  = 2 * i + 1;
-            if (left >= n) break;                 // i is a leaf
+            if (left >= n) break;            
             int right = left + 1;
 
-            // Choose the child with smaller priority
             int smallest = left;
             if (right < n && heap.get(right).priority() < heap.get(left).priority()) {
                 smallest = right;
@@ -174,7 +163,7 @@ public class MinPQueue<KeyType> {
      */
     private void add(KeyType key, double priority) {
         // TODO 9a: Implement this method according to its specification
-        assert !index.containsKey(key) : "add() called with duplicate key";
+        assert !index.containsKey(key);
 
         int pos = heap.size();
         heap.add(new Entry<>(key, priority));
@@ -192,16 +181,15 @@ public class MinPQueue<KeyType> {
         assert index.containsKey(key);
 
         // TODO 9b: Implement this method according to its specification
-        int pos         = index.get(key);
+        int pos = index.get(key);
         Entry<KeyType> eOld = heap.get(pos);
 
         if (eOld.priority() == priority) {
-            return;                      // Nothing to do
+            return;             
         }
 
         heap.set(pos, new Entry<>(key, priority));
 
-        // Decide which direction to rebalance
         if (priority < eOld.priority()) {
             bubbleUp(pos);
         } else {
@@ -221,6 +209,7 @@ public class MinPQueue<KeyType> {
         } else {
             update(key, priority);
         }
+        assertInv();
     }
 
     /**
@@ -231,12 +220,11 @@ public class MinPQueue<KeyType> {
     public KeyType remove() {
         // TODO 9c: Implement this method according to its specification
         if (heap.isEmpty()) {
-            throw new NoSuchElementException("remove() on empty MinPQueue");
+            throw new NoSuchElementException();
         }
 
         KeyType minKey = heap.getFirst().key();
 
-        // Move last element to the root (if any) then shrink
         int last = heap.size() - 1;
         swap(0, last);
         heap.remove(last);

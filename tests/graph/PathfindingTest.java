@@ -101,24 +101,15 @@ public class PathfindingTest {
             SimpleVertex vb = g.getVertex("B");
             SimpleVertex vc = g.getVertex("C");
             
-            // Get the edge from C to A to use as previousEdge
             SimpleEdge edgeCA = g.getEdge(vc, va);
-            
-            // Compute paths from A with a previousEdge C->A
-            // This should prevent backtracking from A to C directly
             Map<SimpleVertex, PathEnd<SimpleEdge>> paths = Pathfinding.pathInfo(va, edgeCA);
             
-            // All vertices should still be reachable, but through a different path
             assertEquals(3, paths.size());
-            
-            // A is reachable as starting point
             assertEquals(0, paths.get(va).distance());
             
-            // B is reachable directly from A
             assertEquals(2, paths.get(vb).distance());
             assertEquals(g.getEdge(va, vb), paths.get(vb).lastEdge());
             
-            // C is reachable only through B now, not directly from A
             assertEquals(5, paths.get(vc).distance());
             assertEquals(g.getEdge(vb, vc), paths.get(vc).lastEdge());
         }
@@ -128,7 +119,6 @@ public class PathfindingTest {
         @Test
         void testBacktrackingShorter() {
             // TODO 12b: Complete this test case
-            // Create a graph where the shortest path involves backtracking
             String graphText = """
                     A -> B 1
                     B -> C 1
@@ -141,22 +131,15 @@ public class PathfindingTest {
             SimpleVertex vc = g.getVertex("C");
             SimpleVertex vd = g.getVertex("D");
             
-            // Compute paths from A with no previous edge
             Map<SimpleVertex, PathEnd<SimpleEdge>> paths = Pathfinding.pathInfo(va, null);
-            
-            // All vertices should be reachable
             assertEquals(4, paths.size());
             
-            // The shortest path to D should be via B
             assertEquals(11, paths.get(vd).distance());
             assertEquals(g.getEdge(vb, vd), paths.get(vd).lastEdge());
-            
-            // Now compute paths from B with previous edge A->B
-            // This prevents B->A backtracking
+
             SimpleEdge edgeAB = g.getEdge(va, vb);
             paths = Pathfinding.pathInfo(vb, edgeAB);
             
-            // Only B, C, D should be reachable
             assertEquals(3, paths.size());
             assertTrue(paths.containsKey(vb));
             assertTrue(paths.containsKey(vc));
@@ -168,7 +151,6 @@ public class PathfindingTest {
         @Test
         void testLongerPaths() {
             // TODO 12c: Complete this test case
-            // Create a graph with a path of at least 3 edges
             String graphText = """
                     A -> B 1
                     B -> C 2
@@ -181,36 +163,26 @@ public class PathfindingTest {
             SimpleVertex vc = g.getVertex("C");
             SimpleVertex vd = g.getVertex("D");
             
-            // Compute paths from A
             Map<SimpleVertex, PathEnd<SimpleEdge>> paths = Pathfinding.pathInfo(va, null);
-            
-            // All vertices should be reachable
             assertEquals(4, paths.size());
             
-            // Check distances
             assertEquals(0, paths.get(va).distance());
             assertEquals(1, paths.get(vb).distance());
             assertEquals(3, paths.get(vc).distance());
-            
-            // D should be reached through C (path of 3 edges) since it's shorter (1+2+3=6) 
-            // than the direct path (10)
+
             assertEquals(6, paths.get(vd).distance());
             assertEquals(g.getEdge(vc, vd), paths.get(vd).lastEdge());
             
-            // Reconstruct the full path to D
             SimpleVertex current = vd;
             List<SimpleEdge> pathToD = new ArrayList<>();
             while (!current.equals(va)) {
                 PathEnd<SimpleEdge> pathEnd = paths.get(current);
                 SimpleEdge edge = pathEnd.lastEdge();
-                pathToD.add(0, edge); // Add to front of list
+                pathToD.add(0, edge);
                 current = edge.src();
             }
             
-            // Check the path has 3 edges
             assertEquals(3, pathToD.size());
-            
-            // Check the sequence of vertices
             assertEquals(va, pathToD.get(0).src());
             assertEquals(vb, pathToD.get(0).dst());
             assertEquals(vb, pathToD.get(1).src());
@@ -280,21 +252,13 @@ public class PathfindingTest {
             SimpleVertex va = g.getVertex("A");
             SimpleVertex vb = g.getVertex("B");
             
-            // Get the shortest path from A to B
             List<SimpleEdge> path = Pathfinding.shortestNonBacktrackingPath(va, vb, null);
-            
-            // Path should not be null
             assertNotNull(path);
-            
-            // Path should have exactly one edge
             assertEquals(1, path.size());
-            
-            // The edge should be A->B directly
             assertEquals(va, path.get(0).src());
             assertEquals(vb, path.get(0).dst());
             assertEquals(5, path.get(0).weight());
             
-            // Verify the path uses the assertPathVertices helper
             assertPathVertices(Arrays.asList("A", "B"), path);
         }
 
@@ -305,13 +269,8 @@ public class PathfindingTest {
             SimpleGraph g = SimpleGraph.fromText(graph2);
             SimpleVertex va = g.getVertex("A");
             
-            // Get the path from A to A
             List<SimpleEdge> path = Pathfinding.shortestNonBacktrackingPath(va, va, null);
-            
-            // Path should not be null (but empty)
             assertNotNull(path);
-            
-            // Path should have zero edges
             assertEquals(0, path.size());
         }
 
@@ -330,7 +289,6 @@ public class PathfindingTest {
         @Test
         void testNonBacktrackingPreventsPath() {
             // TODO 12f: Complete this test case
-            // Create a graph where the only path requires backtracking
             String graphText = """
                     A -> B 1
                     B -> C 1
@@ -341,18 +299,12 @@ public class PathfindingTest {
             SimpleVertex vb = g.getVertex("B");
             SimpleVertex vc = g.getVertex("C");
             
-            // Get an edge to use as previous edge to enforce non-backtracking
             SimpleEdge edgeCA = g.getEdge(vc, va);
-            
-            // Try to find a path from A to C with previous edge being C->A
-            // This should prevent any path that requires backtracking
             List<SimpleEdge> path = Pathfinding.shortestNonBacktrackingPath(va, vc, edgeCA);
             
-            // Path should be available through B
             assertNotNull(path);
             assertEquals(2, path.size());
             
-            // Now create a graph where backtracking is required for any path
             graphText = """
                     A -> B 1
                     B -> A 1
@@ -361,14 +313,8 @@ public class PathfindingTest {
             va = g.getVertex("A");
             vb = g.getVertex("B");
             
-            // Get edge B->A to use as previous edge
             SimpleEdge edgeBA = g.getEdge(vb, va);
-            
-            // Try to find a path from A to B with previous edge being B->A
-            // This should prevent the only valid path due to non-backtracking
             path = Pathfinding.shortestNonBacktrackingPath(va, vb, edgeBA);
-            
-            // Path should be null since non-backtracking prevents finding a path
             assertNull(path);
         }
 
@@ -377,7 +323,6 @@ public class PathfindingTest {
         @Test
         void testMultipleShortestPaths() {
             // TODO 12g: Complete this test case
-            // Create a graph with multiple equally-weighted paths
             String graphText = """
                     A -> B 5
                     A -> C 5
@@ -390,27 +335,15 @@ public class PathfindingTest {
             SimpleVertex vc = g.getVertex("C");
             SimpleVertex vd = g.getVertex("D");
             
-            // Get the shortest path from A to D
             List<SimpleEdge> path = Pathfinding.shortestNonBacktrackingPath(va, vd, null);
-            
-            // Path should not be null
             assertNotNull(path);
-            
-            // Path should have exactly 2 edges
             assertEquals(2, path.size());
-            
-            // First edge should be from A to either B or C
             assertEquals(va, path.get(0).src());
             assertTrue(path.get(0).dst().equals(vb) || path.get(0).dst().equals(vc));
-            
-            // Second edge should be from either B or C to D
             assertTrue(path.get(1).src().equals(vb) || path.get(1).src().equals(vc));
             assertEquals(vd, path.get(1).dst());
-            
-            // The path should be consistent (if A->B is first, then B->D is second)
             assertEquals(path.get(0).dst(), path.get(1).src());
-            
-            // Total path weight should be 10
+
             double totalWeight = path.get(0).weight() + path.get(1).weight();
             assertEquals(10.0, totalWeight);
         }

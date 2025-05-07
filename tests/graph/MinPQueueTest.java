@@ -43,11 +43,9 @@ class MinPQueueTest {
         // TODO 10a: Complete this test case
         MinPQueue<Integer> q = new MinPQueue<>();
         
-        // Add initial element
         q.addOrUpdate(0, 0);
         int initialSize = q.size();
         
-        // Add distinct element
         q.addOrUpdate(1, 1);
         assertEquals(initialSize + 1, q.size());
     }
@@ -62,21 +60,16 @@ class MinPQueueTest {
         // TODO 10b: Complete this test case
         MinPQueue<Integer> q = new MinPQueue<>();
         
-        // Add elements with x having higher priority
-        q.addOrUpdate(0, 2.0);  // x
-        q.addOrUpdate(1, 1.0);  // current minimum
+        q.addOrUpdate(0, 2.0); 
+        q.addOrUpdate(1, 1.0); 
         
         int initialSize = q.size();
-        double newPriority = 0.5;  // new minimum priority
+        double newPriority = 0.5; 
         
-        // Update x's priority to become minimum
         q.addOrUpdate(0, newPriority);
         
-        // Check size unchanged
         assertEquals(initialSize, q.size());
-        // Check x is now minimum element
         assertEquals(0, q.peek());
-        // Check x's new priority is minimum
         assertEquals(newPriority, q.minPriority());
     }
 
@@ -87,14 +80,12 @@ class MinPQueueTest {
         // TODO 10c: Complete this test case
         MinPQueue<Integer> q = new MinPQueue<>();
         
-        // Test case 1: Size > 1
         q.addOrUpdate(0, 0);
         q.addOrUpdate(1, 1);
         int initialSize = q.size();
         q.remove();
         assertEquals(initialSize - 1, q.size());
         
-        // Test case 2: Size = 1
         q = new MinPQueue<>();
         q.addOrUpdate(0, 0);
         q.remove();
@@ -173,13 +164,8 @@ class MinPQueueTest {
         // TODO 10d: Complete this test case
         MinPQueue<Integer> q = new MinPQueue<>();
         
-        // Test peek() on empty queue
         assertThrows(NoSuchElementException.class, () -> q.peek());
-        
-        // Test minPriority() on empty queue
         assertThrows(NoSuchElementException.class, () -> q.minPriority());
-        
-        // Test remove() on empty queue
         assertThrows(NoSuchElementException.class, () -> q.remove());
     }
 }

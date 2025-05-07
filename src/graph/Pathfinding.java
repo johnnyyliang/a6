@@ -51,54 +51,35 @@ public class Pathfinding {
         //  implementation should make use of Dijkstra's algorithm (modified to prevent path back-
         //  tracking), creating a `MinPQueue` to manage the "frontier" set of vertices, and settling
         //  the vertices in this frontier in increasing distance order.
-        
-        // Create a priority queue to manage the frontier vertices
         MinPQueue<V> frontier = new MinPQueue<>();
-        
-        // Initialize source vertex with distance 0
-        // Since src is a starting point, we have no incoming edge, so lastEdge is null
+
         pathInfo.put(src, new PathEnd<>(0.0, null));
         frontier.addOrUpdate(src, 0.0);
-        
-        // Continue until we've settled all reachable vertices
+
         while (!frontier.isEmpty()) {
-            // Get vertex with minimum distance
             V current = frontier.remove();
-            
-            // Get the PathEnd for current vertex
             PathEnd<E> currentPath = pathInfo.get(current);
             
-            // Explore all outgoing edges from current vertex
             for (E edge : current.outgoingEdges()) {
                 V neighbor = edge.dst();
-                
-                // Check for backtracking
                 boolean isBacktracking = false;
-                
-                // First case: if current vertex is source and previousEdge exists,
-                // don't go back to where we came from
-                if (current.equals(src) && previousEdge != null && 
+
+                if (current.equals(src) && previousEdge != null &&
                     edge.dst().equals(previousEdge.src())) {
                     isBacktracking = true;
                 }
-                
-                // Second case: if not at source, check if we're backtracking along the path
-                if (currentPath.lastEdge() != null && 
+
+                if (currentPath.lastEdge() != null &&
                     edge.dst().equals(currentPath.lastEdge().src())) {
                     isBacktracking = true;
                 }
                 
-                // Skip backtracking edges
                 if (isBacktracking) {
                     continue;
                 }
-                
-                // Calculate new distance
+
                 double newDistance = currentPath.distance() + edge.weight();
-                
-                // Update neighbor's path info if:
-                // 1. It doesn't have a path yet, or
-                // 2. This new path is shorter than the existing one
+
                 if (!pathInfo.containsKey(neighbor) || 
                     newDistance < pathInfo.get(neighbor).distance()) {
                     pathInfo.put(neighbor, new PathEnd<>(newDistance, edge));
@@ -106,7 +87,6 @@ public class Pathfinding {
                 }
             }
         }
-
         return pathInfo;
     }
 
@@ -122,25 +102,14 @@ public class Pathfinding {
         List<E> path = new LinkedList<>();
 
         // TODO 11b: Complete this implementation of this method according to its specification.
-        
-        // If destination is not reachable, return the empty path
         if (!pathInfo.containsKey(dst)) {
             return path;
         }
-        
-        // Start at the destination
         V current = dst;
-        
-        // Work backwards from dst to src
         while (!current.equals(src)) {
-            // Get the last edge on the path to current
             PathEnd<E> pathEnd = pathInfo.get(current);
             E edge = pathEnd.lastEdge();
-            
-            // Add edge to the beginning of our path
             path.add(0, edge);
-            
-            // Move to the source of this edge
             current = edge.src();
         }
         
