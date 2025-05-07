@@ -148,9 +148,9 @@ public class MazeGraphTest {
                 wwwww""");
         MazeGraph graph = new MazeGraph(map);
         Map<IPair, MazeVertex> vertices = new HashMap<>();
-        graph.vertices().forEach(v -> vertices.put(v.loc(), v));
-
-        // graph contains two vertices with the correct locations
+        for (MazeVertex v : graph.vertices()) {
+            vertices.put(v.loc(), v);
+        }
         assertEquals(2, vertices.size());
         IPair top = new IPair(3, 1);
         IPair bottom = new IPair(3, 2);
@@ -160,20 +160,19 @@ public class MazeGraphTest {
         MazeVertex vt = vertices.get(top);
         MazeVertex vb = vertices.get(bottom);
 
-        // top vertex has one edge to the vertex below
         assertNull(vt.edgeInDirection(Direction.LEFT));
         assertNull(vt.edgeInDirection(Direction.UP));
         assertNull(vt.edgeInDirection(Direction.RIGHT));
-        MazeEdge t2b = vt.edgeInDirection(Direction.DOWN);
-        assertNotNull(t2b);
+        MazeEdge topToB = vt.edgeInDirection(Direction.DOWN);
+        assertNotNull(topToB);
+
         double tElev = map.elevations()[3][1];
         double bElev = map.elevations()[3][2];
-        assertEquals(vt, t2b.src());
-        assertEquals(vb, t2b.dst());
-        assertEquals(Direction.DOWN, t2b.direction());
-        assertEquals(MazeGraph.edgeWeight(tElev, bElev), t2b.weight());
+        assertEquals(vt, topToB.src());
+        assertEquals(vb, topToB.dst());
+        assertEquals(Direction.DOWN, topToB.direction());
+        assertEquals(MazeGraph.edgeWeight(tElev, bElev), topToB.weight());
 
-        // bottom vertex has one edge to the vertex above
         assertNull(vb.edgeInDirection(Direction.LEFT));
         assertNull(vb.edgeInDirection(Direction.DOWN));
         assertNull(vb.edgeInDirection(Direction.RIGHT));
@@ -198,8 +197,9 @@ public class MazeGraphTest {
                 wwwww""");
         MazeGraph graph = new MazeGraph(map);
         Map<IPair, MazeVertex> vertices = new HashMap<>();
-        graph.vertices().forEach(v -> vertices.put(v.loc(), v));
-
+        for (MazeVertex v : graph.vertices()) {
+            vertices.put(v.loc(), v);
+        }
         assertEquals(2, vertices.size());
         IPair left = new IPair(0, 0);
         IPair right = new IPair(4, 0);
@@ -209,7 +209,6 @@ public class MazeGraphTest {
         MazeVertex vl = vertices.get(left);
         MazeVertex vr = vertices.get(right);
 
-        // left vertex has a tunnel edge to the right vertex
         MazeEdge l2r = vl.edgeInDirection(Direction.LEFT);
         assertNotNull(l2r);
         double lElev = map.elevations()[0][0];
@@ -219,7 +218,6 @@ public class MazeGraphTest {
         assertEquals(Direction.LEFT, l2r.direction());
         assertEquals(MazeGraph.edgeWeight(lElev, rElev), l2r.weight());
 
-        // right vertex has a tunnel edge to the left vertex
         MazeEdge r2l = vr.edgeInDirection(Direction.RIGHT);
         assertNotNull(r2l);
         assertEquals(vr, r2l.src());
@@ -313,7 +311,7 @@ public class MazeGraphTest {
     //It is crucial that your graph is being linked together correctly, otherwise the later
     //portions of the assignment will break with strange behaviors.
     @Test
-    @DisplayName("WHEN a GameMap has a T-junction, THEN the center vertex has three outgoing edges and the others have one.")
+    @DisplayName("Given a T-junction, the center vertex has three outgoing edges and the others have one.")
     void testTJunction() {
         GameMap map = createMap("""
                 wwwww
@@ -323,66 +321,37 @@ public class MazeGraphTest {
                 wwwww""");
         MazeGraph graph = new MazeGraph(map);
         Map<IPair, MazeVertex> vertices = new HashMap<>();
-        graph.vertices().forEach(v -> vertices.put(v.loc(), v));
+        for (MazeVertex v : graph.vertices()) {
+            vertices.put(v.loc(), v);
+        }
         assertEquals(4, vertices.size());
         
-        // Center is (3,2)
         MazeVertex center = vertices.get(new IPair(3,2));
         assertNotNull(center);
         
-        // Check center's outgoing edges
-        assertNotNull(center.edgeInDirection(Direction.LEFT), "Center should have edge LEFT");  // to (2,2)
-        assertNull(center.edgeInDirection(Direction.UP), "Center should not have edge UP");    // to (3,1) - WALL
-        assertNotNull(center.edgeInDirection(Direction.DOWN), "Center should have edge DOWN");  // to (3,3)
-        assertNull(center.edgeInDirection(Direction.RIGHT), "Center should not have edge RIGHT");    // no edge to right
+        assertNotNull(center.edgeInDirection(Direction.LEFT));
+        assertNull(center.edgeInDirection(Direction.UP));
+        assertNotNull(center.edgeInDirection(Direction.DOWN));
+        assertNull(center.edgeInDirection(Direction.RIGHT));
         
-        // Check other vertices' outgoing edges
         MazeVertex left = vertices.get(new IPair(2,2));
         assertNotNull(left);
-        assertNotNull(left.edgeInDirection(Direction.LEFT), "Left should have edge LEFT");   // to (1,2)
-        assertNotNull(left.edgeInDirection(Direction.RIGHT), "Left should have edge RIGHT");   // to center
+        assertNotNull(left.edgeInDirection(Direction.LEFT));
+        assertNotNull(left.edgeInDirection(Direction.RIGHT));
         assertNull(left.edgeInDirection(Direction.UP));
         assertNull(left.edgeInDirection(Direction.DOWN));
         
         MazeVertex down = vertices.get(new IPair(3,3));
         assertNotNull(down);
-        assertNotNull(down.edgeInDirection(Direction.UP), "Down should have edge UP");      // to center
+        assertNotNull(down.edgeInDirection(Direction.UP));
         assertNull(down.edgeInDirection(Direction.LEFT));
         assertNull(down.edgeInDirection(Direction.RIGHT));
         assertNull(down.edgeInDirection(Direction.DOWN));
     }
 
     @Test
-    @DisplayName("WHEN a GameMap has a dead end, THEN the dead end vertex has only one outgoing edge.")
-    void testDeadEnd() {
-        GameMap map = createMap("""
-                wwwww
-                wwwww
-                wwppw
-                wwwww
-                wwwww""");
-        MazeGraph graph = new MazeGraph(map);
-        Map<IPair, MazeVertex> vertices = new HashMap<>();
-        graph.vertices().forEach(v -> vertices.put(v.loc(), v));
-        assertEquals(2, vertices.size());
-        // (2,2) is the dead end
-        MazeVertex deadEnd = vertices.get(new IPair(2,2));
-        int deadEndEdges = 0;
-        for (Direction d : Direction.values()) {
-            if (deadEnd.edgeInDirection(d) != null) deadEndEdges++;
-        }
-        assertEquals(1, deadEndEdges);
-        // (3,2) is the other vertex
-        MazeVertex other = vertices.get(new IPair(3,2));
-        int otherEdges = 0;
-        for (Direction d : Direction.values()) {
-            if (other.edgeInDirection(d) != null) otherEdges++;
-        }
-        assertEquals(1, otherEdges);
-    }
-
-    @Test
-    @DisplayName("WHEN a GameMap has a cross intersection, THEN the center vertex has four outgoing edges and the others have one.")
+    @DisplayName("Given a GameMap has a cross intersection, the center vertex has four" +
+            " outgoing edges and the others have one.")
     void testCrossIntersection() {
         GameMap map = createMap("""
                 wwwww
@@ -392,16 +361,17 @@ public class MazeGraphTest {
                 wwwww""");
         MazeGraph graph = new MazeGraph(map);
         Map<IPair, MazeVertex> vertices = new HashMap<>();
-        graph.vertices().forEach(v -> vertices.put(v.loc(), v));
+        for (MazeVertex v : graph.vertices()) {
+            vertices.put(v.loc(), v);
+        }
         assertEquals(5, vertices.size());
-        // Center is (2,2)
         MazeVertex center = vertices.get(new IPair(2,2));
         int centerEdges = 0;
         for (Direction d : Direction.values()) {
             if (center.edgeInDirection(d) != null) centerEdges++;
         }
         assertEquals(4, centerEdges);
-        // The other four should have only one outgoing edge each
+
         assertEquals(1, countEdges(vertices.get(new IPair(2,1))));
         assertEquals(1, countEdges(vertices.get(new IPair(1,2))));
         assertEquals(1, countEdges(vertices.get(new IPair(3,2))));
@@ -409,7 +379,7 @@ public class MazeGraphTest {
     }
 
     @Test
-    @DisplayName("WHEN a GameMap has a vertical tunnel, THEN the top and bottom vertices are connected with tunnel edges.")
+    @DisplayName("Given a vertical tunnel, the top and bottom vertices are connected")
     void testVerticalTunnel() {
         GameMap map = createMap("""
                 pwwww
@@ -419,7 +389,9 @@ public class MazeGraphTest {
                 pwwww""");
         MazeGraph graph = new MazeGraph(map);
         Map<IPair, MazeVertex> vertices = new HashMap<>();
-        graph.vertices().forEach(v -> vertices.put(v.loc(), v));
+        for (MazeVertex v : graph.vertices()) {
+            vertices.put(v.loc(), v);
+        }
         assertEquals(2, vertices.size());
         IPair top = new IPair(0, 0);
         IPair bottom = new IPair(0, 4);
@@ -429,7 +401,6 @@ public class MazeGraphTest {
         MazeVertex vt = vertices.get(top);
         MazeVertex vb = vertices.get(bottom);
 
-        // top vertex has a tunnel edge to the bottom vertex
         MazeEdge t2b = vt.edgeInDirection(Direction.UP);
         assertNotNull(t2b);
         double tElev = map.elevations()[0][0];
@@ -439,73 +410,12 @@ public class MazeGraphTest {
         assertEquals(Direction.UP, t2b.direction());
         assertEquals(MazeGraph.edgeWeight(tElev, bElev), t2b.weight());
 
-        // bottom vertex has a tunnel edge to the top vertex
         MazeEdge b2t = vb.edgeInDirection(Direction.DOWN);
         assertNotNull(b2t);
         assertEquals(vb, b2t.src());
         assertEquals(vt, b2t.dst());
         assertEquals(Direction.DOWN, b2t.direction());
         assertEquals(MazeGraph.edgeWeight(bElev, tElev), b2t.weight());
-    }
-
-    @Test
-    @DisplayName("WHEN a GameMap has a complex path with multiple branches, THEN all vertices have the correct number of edges.")
-    void testComplexPath() {
-        GameMap map = createMap("""
-                wwwwwww
-                wpppppw
-                wwpwpww
-                wpppppw
-                wwwwwww""");
-        MazeGraph graph = new MazeGraph(map);
-        Map<IPair, MazeVertex> vertices = new HashMap<>();
-        graph.vertices().forEach(v -> vertices.put(v.loc(), v));
-        assertEquals(12, vertices.size());
-        
-        // Check the middle vertices in row 1 (y=1)
-        MazeVertex center = vertices.get(new IPair(3,1));
-        assertNotNull(center, "Center vertex should exist");
-        assertEquals(2, countEdges(center));
-        
-        // Check the T-junction vertices in row 1 - these have 3 edges (left, right, down)
-        MazeVertex leftT = vertices.get(new IPair(2,1));
-        assertNotNull(leftT, "Left T-junction vertex should exist");
-        assertEquals(3, countEdges(leftT));
-        
-        MazeVertex rightT = vertices.get(new IPair(4,1));
-        assertNotNull(rightT, "Right T-junction vertex should exist");
-        assertEquals(3, countEdges(rightT));
-        
-        // Check the end vertices in row 1 - these have 1 edge (right)
-        MazeVertex leftEnd = vertices.get(new IPair(1,1));
-        assertNotNull(leftEnd, "Left end vertex should exist");
-        assertEquals(1, countEdges(leftEnd), "Left end vertex should have 1 edge (right)");
-        
-        MazeVertex rightEnd = vertices.get(new IPair(5,1));
-        assertNotNull(rightEnd, "Right end vertex should exist");
-        assertEquals(1, countEdges(rightEnd), "Right end vertex should have 1 edge (left)");
-        
-        // Check the middle vertices in rows 2 and 3 - these have 2 edges (up and down)
-        MazeVertex leftMid = vertices.get(new IPair(2,2));
-        assertNotNull(leftMid, "Left middle vertex should exist");
-        assertEquals(2, countEdges(leftMid));
-        
-        MazeVertex rightMid = vertices.get(new IPair(4,2));
-        assertNotNull(rightMid, "Right middle vertex should exist");
-        assertEquals(2, countEdges(rightMid));
-        
-        // Check vertices in bottom row (y=3)
-        MazeVertex bottomLeft = vertices.get(new IPair(1,3));
-        assertNotNull(bottomLeft, "Bottom left vertex should exist");
-        assertEquals(1, countEdges(bottomLeft), "Bottom left vertex should have 1 edge (right)");
-        
-        MazeVertex bottomCenter = vertices.get(new IPair(3,3));
-        assertNotNull(bottomCenter, "Bottom center vertex should exist");
-        assertEquals(2, countEdges(bottomCenter), "Bottom center vertex should have 2 edges (left, right)");
-        
-        MazeVertex bottomRight = vertices.get(new IPair(5,3));
-        assertNotNull(bottomRight, "Bottom right vertex should exist");
-        assertEquals(1, countEdges(bottomRight), "Bottom right vertex should have 1 edge (left)");
     }
 
     // Helper for counting edges

@@ -36,39 +36,24 @@ public class MinPQueue<KeyType> {
 
     // TODO 7: Write an assertInv() method that asserts that all of the class invariants are satisfied.
     /**
-     * Assert *all* representation invariants of this priority queue:<br>
-     * ‑ |heap| == |index|<br>
-     * ‑ For every position <i>i</i>, <code>index.get(heap.get(i).key()) == i</code><br>
-     * ‑ <b>Heap‑order</b>: for every child <i>i &gt; 0</i>,
-     *   <code>heap.get(i).priority() ≥ heap.get(parent(i)).priority()</code>.<br>
-     * ‑ Every mapping in {@code index} refers to the correct {@code heap} entry.
-     *
-     * <p>Because this method is only used in assertions, its checks are removed when assertions are
-     * disabled at run‑time (<code>java ‑ea</code> enables them).</p>
+     * Assert that all the class invariants are satisfied
      */
     private void assertInv() {
-        assert heap.size() == index.size() : "Heap and index sizes differ";
+        assert heap.size() == index.size();
 
         for (int i = 0; i < heap.size(); i++) {
             Entry<KeyType> e = heap.get(i);
-
-            // Mapping agrees with heap
-            assert index.get(e.key()) == i : "Index map incorrect for key " + e.key();
-
-            // Heap‑order property
+            assert index.get(e.key()) == i;
             if (i > 0) {
                 int par = (i - 1) / 2;
-                assert heap.get(i).priority() >= heap.get(par).priority()
-                        : "Heap order violated between " + i + " and parent " + par;
+                assert heap.get(i).priority() >= heap.get(par).priority();
             }
         }
 
-        // No extra mappings
         for (Map.Entry<KeyType, Integer> m : index.entrySet()) {
             int i = m.getValue();
-            assert i >= 0 && i < heap.size() : "Index map out of bounds";
-            assert heap.get(i).key().equals(m.getKey())
-                    : "Index map key/value mismatch for " + m.getKey();
+            assert i >= 0 && i < heap.size();
+            assert heap.get(i).key().equals(m.getKey());
         }
     }
     /**
